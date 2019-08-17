@@ -11,7 +11,7 @@ public class UserRegisterRequestModel {
     @Email(message = ConfigurationConstants.User.ERROR_EMAIL_VALIDATION)
     private String email;
 
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\\$%\\^&\\*])(?=.{8,})", message = ConfigurationConstants.User.ERROR_PASSWORD_VALIDATION)
+    @Pattern(regexp = ".*", message = ConfigurationConstants.User.ERROR_PASSWORD_VALIDATION)
     private String password;
 
     private String confirm;

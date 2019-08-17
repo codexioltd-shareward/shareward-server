@@ -30,6 +30,8 @@ public class User implements UserDetails {
 
     private Set<PaymentRequest> rejectedPayments;
 
+    private Set<Fund> funds;
+
     private Double money;
 
     public User() {
@@ -116,6 +118,15 @@ public class User implements UserDetails {
 
     public void setReceivedInvitations(Set<Invitation> receivedInvitations) {
         this.receivedInvitations = receivedInvitations;
+    }
+
+    @OneToMany(targetEntity = Fund.class, mappedBy = "buyer")
+    public Set<Fund> getFunds() {
+        return funds;
+    }
+
+    public void setFunds(Set<Fund> funds) {
+        this.funds = funds;
     }
 
     @Override
