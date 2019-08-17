@@ -1,5 +1,6 @@
 package bg.codexio.shareward.entity;
 
+import bg.codexio.shareward.constant.ConfigurationConstants;
 import bg.codexio.shareward.model.user.UserRegisterRequestModel;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,10 +20,23 @@ public class User implements UserDetails {
 
     private String fullName;
 
+    private Set<Account> accounts;
+
+    private Set<Invitation> sentInvitations;
+
+    private Set<Invitation> receivedInvitations;
+
+    private Set<PaymentRequest> acceptedPayments;
+
+    private Set<PaymentRequest> rejectedPayments;
+
     private Double money;
 
     public User() {
-        this.money = 0d;
+        this.money = ConfigurationConstants.User.INITIAL_MONEY;
+        this.accounts = new HashSet<>();
+        this.acceptedPayments = new HashSet<>();
+        this.rejectedPayments = new HashSet<>();
     }
 
     public User(String email, String password, String fullName) {
@@ -57,6 +71,51 @@ public class User implements UserDetails {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @ManyToMany(targetEntity = PaymentRequest.class, fetch = FetchType.EAGER)
+    public Set<PaymentRequest> getAcceptedPayments() {
+        return acceptedPayments;
+    }
+
+    public void setAcceptedPayments(Set<PaymentRequest> acceptedPayments) {
+        this.acceptedPayments = acceptedPayments;
+    }
+
+    @ManyToMany(targetEntity = PaymentRequest.class, fetch = FetchType.EAGER)
+    public Set<PaymentRequest> getRejectedPayments() {
+        return rejectedPayments;
+    }
+
+    public void setRejectedPayments(Set<PaymentRequest> rejectedPayments) {
+        this.rejectedPayments = rejectedPayments;
+    }
+
+    @ManyToMany(targetEntity = Account.class, fetch = FetchType.EAGER)
+    public Set<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(Set<Account> accounts) {
+        this.accounts = accounts;
+    }
+
+    @OneToMany(targetEntity = Invitation.class, mappedBy = "inviter", fetch = FetchType.EAGER)
+    public Set<Invitation> getSentInvitations() {
+        return sentInvitations;
+    }
+
+    public void setSentInvitations(Set<Invitation> sentInvitations) {
+        this.sentInvitations = sentInvitations;
+    }
+
+    @OneToMany(targetEntity = Invitation.class, mappedBy = "invited", fetch = FetchType.EAGER)
+    public Set<Invitation> getReceivedInvitations() {
+        return receivedInvitations;
+    }
+
+    public void setReceivedInvitations(Set<Invitation> receivedInvitations) {
+        this.receivedInvitations = receivedInvitations;
     }
 
     @Override
