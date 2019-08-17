@@ -26,12 +26,8 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public ResponseEntity getByPrefix(@RequestParam(required = false) String prefix) {
-        if (prefix == null || prefix.length() < 3) {
-            return ResponseEntity.ok().build();
-        }
-
-        return ResponseEntity.ok(this.userService.listByEmailPrefix(prefix));
+    public ResponseEntity getByPrefix(@RequestParam(name = "email", required = false) String emailPrefix) {
+        return emailPrefix == null || emailPrefix.length() < 3 ? ResponseEntity.ok().build() : ResponseEntity.ok(this.userService.listByEmailPrefix(emailPrefix));
     }
 
 }
