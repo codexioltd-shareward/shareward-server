@@ -1,5 +1,7 @@
 package bg.codexio.shareward.service.user;
 
+import bg.codexio.shareward.entity.Invitation;
+import bg.codexio.shareward.entity.PaymentRequest;
 import bg.codexio.shareward.entity.User;
 import bg.codexio.shareward.exception.user.DuplicateEmailException;
 import bg.codexio.shareward.exception.user.PasswordMismatchException;
@@ -11,5 +13,7 @@ import java.util.Set;
 public interface UserService extends UserDetailsService {
 
     User register(UserRegisterRequestModel request) throws PasswordMismatchException, DuplicateEmailException;
+
+    Set<User> listByEmailPrefix(String emailPrefix);
 
 }

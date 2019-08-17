@@ -1,6 +1,6 @@
 package bg.codexio.shareward.service.user;
 
-
+import bg.codexio.shareward.entity.PaymentRequest;
 import bg.codexio.shareward.entity.User;
 import bg.codexio.shareward.exception.user.DuplicateEmailException;
 import bg.codexio.shareward.exception.user.PasswordMismatchException;
@@ -50,5 +50,10 @@ public class UserServiceImpl implements UserService {
         request.setPassword(this.passwordEncoder.encode(request.getPassword()));
 
         return this.userRepository.saveAndFlush(User.fromRegisterRequest(request));
+    }
+
+    @Override
+    public Set<User> listByEmailPrefix(String emailPrefix) {
+        return this.userRepository.findAllByEmailStartingWith(emailPrefix);
     }
 }
