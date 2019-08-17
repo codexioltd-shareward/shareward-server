@@ -1,6 +1,7 @@
 package bg.codexio.shareward.entity;
 
 import bg.codexio.shareward.model.account.AccountCreateRequestModel;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -18,14 +19,19 @@ public class Account {
 
     private Double sum;
 
+    @JsonIgnore
     private Set<Invitation> invitations;
 
+    @JsonIgnore
     private Set<PaymentRequest> receivedRequests;
 
+    @JsonIgnore
     private Set<PaymentRequest> initiatedRequests;
 
+    @JsonIgnore
     private Set<Payment> receivedPayments;
 
+    @JsonIgnore
     private Set<Payment> sentPayments;
 
     public static Account fromCreateRequest(AccountCreateRequestModel input) {
@@ -64,7 +70,7 @@ public class Account {
         this.name = name;
     }
 
-    @ManyToMany(targetEntity = User.class, mappedBy = "accounts")
+    @ManyToMany(targetEntity = User.class, mappedBy = "accounts", fetch = FetchType.EAGER)
     public Set<User> getUsers() {
         return users;
     }

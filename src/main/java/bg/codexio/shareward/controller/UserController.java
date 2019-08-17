@@ -27,6 +27,10 @@ public class UserController {
         this.paymentProcessor = paymentProcessor;
     }
 
+    @GetMapping("/users/me")
+    public ResponseEntity me(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(user);
+    }
 
     @PostMapping("/users")
     public ResponseEntity register(@RequestBody @Valid UserRegisterRequestModel model) throws PasswordMismatchException, DuplicateEmailException {

@@ -39,4 +39,7 @@ public interface AccountService {
 
     Set<Account> listByNamePrefix(String namePrefix);
 
+    Set<User> getParticipants(Long accountId, User user) throws NotAnOwnerException;
+
+    Account details(Long accountId, User user) throws NotAnOwnerException;
 }

@@ -2,6 +2,7 @@ package bg.codexio.shareward.entity;
 
 import bg.codexio.shareward.constant.ConfigurationConstants;
 import bg.codexio.shareward.model.user.UserRegisterRequestModel;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -20,16 +21,22 @@ public class User implements UserDetails {
 
     private String fullName;
 
+    @JsonIgnore
     private Set<Account> accounts;
 
+    @JsonIgnore
     private Set<Invitation> sentInvitations;
 
+    @JsonIgnore
     private Set<Invitation> receivedInvitations;
 
+    @JsonIgnore
     private Set<PaymentRequest> acceptedPayments;
 
+    @JsonIgnore
     private Set<PaymentRequest> rejectedPayments;
 
+    @JsonIgnore
     private Set<Fund> funds;
 
     private Double money;

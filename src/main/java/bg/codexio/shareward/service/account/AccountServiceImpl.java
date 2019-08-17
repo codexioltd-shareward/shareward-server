@@ -44,22 +44,26 @@ public class AccountServiceImpl implements AccountService {
         }
 
         user.setMoney(user.getMoney() - model.getAmount());
-        this.userRepository.saveAndFlush(user);
 
         var account = Account.fromCreateRequest(model);
         account.getUsers().add(user);
 
-        return this.accountRepository.saveAndFlush(account);
+        user.getAccounts().add(account);
+        this.accountRepository.saveAndFlush(account);
+        this.userRepository.saveAndFlush(user);
+
+        return account;
     }
 
     @Override
     public Invitation invite(User inviter, Long invitedId, Long accountId) throws NotAnOwnerException {
-        this.getAccount(accountId, inviter);
+        var account = this.getAccount(accountId, inviter);
 
         var invited = this.userRepository.findById(invitedId).orElseThrow(IllegalArgumentException::new);
 
         var invitation = new Invitation(invited);
         invitation.setInviter(inviter);
+        invitation.setAccount(account);
 
         return this.invitationRepository.saveAndFlush(invitation);
     }
@@ -129,6 +133,8 @@ public class AccountServiceImpl implements AccountService {
         }
 
         request.getAcceptedUsers().add(user);
+        user.getAcceptedPayments().add(request);
+        this.userRepository.saveAndFlush(user);
 
         if ((request.getAcceptedUsers().size() * 1.0) / request.getSender().getUsers().size() > PAYMENT_REQUEST_SUCCESS_FACTOR) {
             var payment = new Payment();
@@ -171,6 +177,9 @@ public class AccountServiceImpl implements AccountService {
         }
 
         request.getRejectedUsers().add(user);
+        user.getRejectedPayments().add(request);
+
+        this.userRepository.saveAndFlush(user);
 
         return this.paymentRequestRepository.saveAndFlush(request);
     }
@@ -210,6 +219,16 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Set<Account> listByNamePrefix(String namePrefix) {
         return this.accountRepository.findAllByNameStartingWith(namePrefix);
+    }
+
+    @Override
+    public Set<User> getParticipants(Long accountId, User user) throws NotAnOwnerException {
+        return this.getAccount(accountId, user).getUsers();
+    }
+
+    @Override
+    public Account details(Long accountId, User user) throws NotAnOwnerException {
+        return this.getAccount(accountId, user);
     }
 
     private Account getAccount(Long accountId, User user) throws NotAnOwnerException {
