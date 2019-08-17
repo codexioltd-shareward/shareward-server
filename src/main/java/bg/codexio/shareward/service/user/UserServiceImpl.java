@@ -56,4 +56,13 @@ public class UserServiceImpl implements UserService {
     public Set<User> listByEmailPrefix(String emailPrefix) {
         return this.userRepository.findAllByEmailStartingWith(emailPrefix);
     }
+
+    @Override
+    public Set<PaymentRequest> getReceivedPaymentRequests(User user) {
+        return this.paymentRequestRepository
+                .findAllBySenderIn(user.getAccounts())
+                .stream()
+                .filter(pr -> !pr.getRejectedUsers().contains(user) && !pr.getRejectedUsers().contains(user))
+                .collect(Collectors.toSet());
+    }
 }

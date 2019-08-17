@@ -1,6 +1,5 @@
 package bg.codexio.shareward.service.user;
 
-import bg.codexio.shareward.entity.Invitation;
 import bg.codexio.shareward.entity.PaymentRequest;
 import bg.codexio.shareward.entity.User;
 import bg.codexio.shareward.exception.user.DuplicateEmailException;
@@ -16,4 +15,5 @@ public interface UserService extends UserDetailsService {
 
     Set<User> listByEmailPrefix(String emailPrefix);
 
+    Set<PaymentRequest> getReceivedPaymentRequests(User user);
 }
